@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework:spring-webflux:5.3.15'
+    implementation 'io.projectreactor.netty:reactor-netty-http:1.0.15'
+    testImplementation "io.projectreactor:reactor-tools:3.4.14"
+    testImplementation "io.projectreactor:reactor-test:3.4.14"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
