@@ -12,6 +12,8 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import static io.netty.handler.codec.http.HttpMethod.GET;
+
 public class RequestTest {
 
   HttpClient httpClient = HttpClient.create();
@@ -63,6 +65,20 @@ public class RequestTest {
 
     StepVerifier.create(response)
         .assertNext(e -> Assertions.assertEquals(406, e))
+        .verifyComplete();
+  }
+
+  @Test
+  void testHttpClient406Fix() {
+    Mono<Integer> response = httpClient
+        .headers(headers -> headers.add("User-Agent", "example"))
+        .request(GET)
+        .uri("https://johnnycrawfordlegacy.com")
+        .send((req, out) -> out.then())
+        .responseSingle((httpResponse, byteBufMono) -> Mono.just(httpResponse.status().code()));
+
+    StepVerifier.create(response)
+        .assertNext(e -> Assertions.assertEquals(200, e))
         .verifyComplete();
   }
 }
